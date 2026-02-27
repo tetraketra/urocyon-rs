@@ -3,10 +3,14 @@ use crate::server::args::Args;
 use anyhow::{Error, Result};
 use tracing_subscriber::{filter::LevelFilter, prelude::*};
 
-pub struct Logs {}
+#[allow(dead_code)]
+pub struct Logs {
+    guard: tracing_appender::non_blocking::WorkerGuard,
+}
+
 impl Logs {
     pub fn register(args: &Args) -> Result<Self, Error> {
-        let (writer, _guard) = tracing_appender::non_blocking(
+        let (writer, guard) = tracing_appender::non_blocking(
             std::fs::OpenOptions::new()
                 .create(true)
                 .append(true)
@@ -28,6 +32,6 @@ impl Logs {
             )
             .init();
 
-        Ok(Logs {})
+        Ok(Logs { guard })
     }
 }

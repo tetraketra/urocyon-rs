@@ -12,7 +12,7 @@ use server::ServerBuilder;
 
 refinery::embed_migrations!("migrations"); // TODO: Move to part of args/serve setup.
 
-#[tokio::main(flavor = "current_thread")]
+#[tokio::main(flavor = "multi_thread", worker_threads = 4)]
 async fn main() -> Result<(), Error> {
     ServerBuilder::new()
         .route("/", get(root))
