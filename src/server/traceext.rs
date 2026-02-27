@@ -33,8 +33,28 @@ impl TraceExtension for Router {
                     .and_then(|v| v.to_str().ok())
                 {
                     span.record("request_id", &request_id);
+                    tracing::debug!(
+                        message = "Request start.",
+                        method = %request.method(),
+                        uri = %request.uri(),
+                        request_id = %request_id,
+                    );
                 }
-            });
+            })
+            .on_response(
+                |response: &Response<Body>, duration: std::time::Duration, span: &tracing::Span| {
+                    if let Some(request_id) =
+                        span.field("request_id").and_then(|f| f.to_string().into())
+                    {
+                        tracing::debug!(
+                            message = "Request end.",
+                            status = response.status().as_u16(),
+                            request_id = %request_id,
+                            duration = duration.as_secs_f64(),
+                        );
+                    }
+                },
+            );
 
         self.layer(trace_layer)
             .layer(PropagateRequestIdLayer::new(header.clone()))

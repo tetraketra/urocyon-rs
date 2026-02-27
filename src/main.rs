@@ -44,5 +44,7 @@ async fn create_user(Json(payload): Json<CreateUser>) -> (StatusCode, Json<User>
         username: payload.username,
     };
 
+    tracing::info!("Hello!");
+
     (StatusCode::CREATED, Json(user))
 }
