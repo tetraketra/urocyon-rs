@@ -5,9 +5,7 @@ use axum::{
     routing::{get, post},
 };
 use serde::{Deserialize, Serialize};
-
-mod urocyon;
-use urocyon::{RequestContext, ServerBuilder};
+use urocyon_rs::{RequestContext, ServerBuilder};
 
 #[tokio::main(flavor = "multi_thread", worker_threads = 4)]
 async fn main() -> Result<(), Error> {

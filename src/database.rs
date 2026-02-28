@@ -3,7 +3,7 @@ use std::path::Path;
 use anyhow::{Context, Error, Result, anyhow};
 use sqlx::{SqlitePool, migrate::Migrator};
 
-use crate::urocyon::args::Args;
+use crate::args::Args;
 
 pub struct Database {
     pub pool: SqlitePool,

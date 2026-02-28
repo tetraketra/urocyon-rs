@@ -2,7 +2,7 @@ use anyhow::Result;
 use axum::Router;
 use tokio::net::TcpListener;
 
-use crate::urocyon::{args::Args, database::Database, logs::Logs};
+use crate::{args::Args, database::Database, logs::Logs};
 
 #[allow(dead_code)]
 pub struct Server {

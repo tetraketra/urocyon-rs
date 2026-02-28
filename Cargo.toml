@@ -1,7 +1,13 @@
 [package]
-name = "urocyon-rs"
+name = "urocyon"
 version = "0.1.0"
 edition = "2024"
+description = "Personal single-instance API boilerplate library."
+license = "GPL-3.0-only"
+readme = "README.md"
+repository = "https://github.com/tetraketra/urocyon-rs"
+keywords = ["rust", "api", "rest", "personal"]
+categories = ["web-programming::http-server"]
 
 [dependencies]
 axum = "0.8.8"

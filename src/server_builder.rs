@@ -3,7 +3,7 @@ use axum::{Router, extract::Extension};
 use sqlx::sqlite::SqlitePool;
 use tokio::net::TcpListener;
 
-use crate::urocyon::{args::Args, context::RequestContextExtension, database::Database, logs::Logs, server::Server};
+use crate::{args::Args, context::RequestContextExtension, database::Database, logs::Logs, server::Server};
 
 #[derive(Clone)]
 pub struct ServerBuilder {

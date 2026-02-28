@@ -2,7 +2,7 @@ use anyhow::{Error, Result, anyhow};
 use clap::error::ErrorKind;
 use tracing_subscriber::{filter::LevelFilter, prelude::*};
 
-use crate::urocyon::args::Args;
+use crate::args::Args;
 
 #[allow(dead_code)]
 pub struct Logs {
