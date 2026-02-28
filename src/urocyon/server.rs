@@ -23,9 +23,9 @@ impl Server {
         database: Database,
     ) -> Self {
         Self {
-            router: router,
-            listener: listener,
-            args: args,
+            router,
+            listener,
+            args,
             logs,
             database,
         }

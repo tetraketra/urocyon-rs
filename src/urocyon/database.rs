@@ -40,7 +40,7 @@ impl Database {
         let pool = Self::create_pool(&args.db_path).await?;
         let migr = Self::create_migrator(&args.mgr_path).await?;
 
-        Ok(Self { pool: pool, migr: migr })
+        Ok(Self { pool, migr })
     }
 
     pub async fn migrate(&self) -> Result<(), Error> {
