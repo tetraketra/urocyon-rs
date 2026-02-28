@@ -130,8 +130,8 @@ impl RequestContext {
             );
 
             let cur_span = tracing::Span::current();
-            cur_span.record("status", &status);
-            cur_span.record("duration_ms", &duration_ms);
+            cur_span.record("status", status);
+            cur_span.record("duration_ms", duration_ms);
 
             response
         }

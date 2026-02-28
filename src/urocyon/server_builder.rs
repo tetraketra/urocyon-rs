@@ -30,6 +30,7 @@ impl ServerBuilder {
         let database = Database::register_and_migrate(&args)
             .await
             .with_context(|| anyhow!("Failed to register and migrate database."))?;
+
         let listener_addr = format!("{}:{}", args.address, args.port);
         let listener = TcpListener::bind(listener_addr.clone())
             .await
@@ -42,7 +43,7 @@ impl ServerBuilder {
 
     pub async fn build_and_serve(self) -> Result<(), Error> {
         let server = self.build().await.with_context(|| "Failed to build server.")?;
-        let _ = server.serve().await.with_context(|| "Failed to serve server.")?;
+        server.serve().await.with_context(|| "Failed to serve server.")?;
 
         Ok(())
     }

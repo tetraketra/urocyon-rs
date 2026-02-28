@@ -43,7 +43,7 @@ pub struct Args {
 impl Args {
     pub fn parse_or_exit_with_clap_error() -> Self {
         Self::try_parse().unwrap_or_else(|e| {
-            eprintln!("{}", e.to_string());
+            eprintln!("{}", e);
             std::process::exit(1);
         })
     }

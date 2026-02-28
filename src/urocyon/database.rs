@@ -47,14 +47,14 @@ impl Database {
         self.migr
             .run(&self.pool)
             .await
-            .with_context(|| format!("Failed to run migrations."))
+            .with_context(|| "Failed to run migrations.")
     }
 
     pub async fn register_and_migrate(args: &Args) -> Result<Self> {
         let database = Self::register(args)
             .await
-            .with_context(|| format!("Failed to register database."))?;
-        let _ = database.migrate().await?;
+            .with_context(|| "Failed to register database.")?;
+        database.migrate().await?;
 
         Ok(database)
     }
