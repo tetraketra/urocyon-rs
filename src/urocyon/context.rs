@@ -40,7 +40,7 @@ impl RequestContext {
         msg: &str,
     ) {
         match level {
-            /* You can't use `event!` directly here because `level` isn't a literal. */
+            /* You can't use `event!` directly here because `level` isn't a literal T>T */
             Level::TRACE => tracing::trace!(msg, id=%self.id, uri=%self.uri, method=%self.method),
             Level::DEBUG => tracing::debug!(msg, id=%self.id, uri=%self.uri, method=%self.method),
             Level::INFO => tracing::info!(msg, id=%self.id, uri=%self.uri, method=%self.method),
