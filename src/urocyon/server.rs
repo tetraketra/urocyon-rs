@@ -2,14 +2,14 @@ use anyhow::Result;
 use axum::Router;
 use tokio::net::TcpListener;
 
-use crate::urocyon::{args::Args, database::Database, logs::LogManager};
+use crate::urocyon::{args::Args, database::Database, logs::Logs};
 
 #[allow(dead_code)]
 pub struct Server {
     pub args: Args,
     pub database: Database,
 
-    logs: LogManager,
+    logs: Logs,
     router: Router,
     listener: TcpListener,
 }
@@ -19,7 +19,7 @@ impl Server {
         router: Router,
         listener: TcpListener,
         args: Args,
-        logs: LogManager,
+        logs: Logs,
         database: Database,
     ) -> Self {
         Self {

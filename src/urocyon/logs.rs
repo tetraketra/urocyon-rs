@@ -5,11 +5,11 @@ use tracing_subscriber::{filter::LevelFilter, prelude::*};
 use crate::urocyon::args::Args;
 
 #[allow(dead_code)]
-pub struct LogManager {
+pub struct Logs {
     guard: tracing_appender::non_blocking::WorkerGuard,
 }
 
-impl LogManager {
+impl Logs {
     pub fn register(args: &Args) -> Result<Self> {
         let path = std::path::Path::new(&args.log_path);
         let path_dir = path
@@ -36,6 +36,6 @@ impl LogManager {
             )
             .init();
 
-        Ok(LogManager { guard })
+        Ok(Logs { guard })
     }
 }
