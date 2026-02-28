@@ -1,16 +1,13 @@
+use anyhow::{Error, Result};
 use axum::{
-    Json,
+    Extension, Json,
     http::StatusCode,
     routing::{get, post},
 };
-
-use anyhow::{Error, Result};
 use serde::{Deserialize, Serialize};
 
-mod server;
-use server::ServerBuilder;
-
-refinery::embed_migrations!("migrations"); // TODO: Move to part of args/serve setup.
+mod urocyon;
+use urocyon::{RequestContext, ServerBuilder};
 
 #[tokio::main(flavor = "multi_thread", worker_threads = 4)]
 async fn main() -> Result<(), Error> {
@@ -38,13 +35,16 @@ struct User {
     username: String,
 }
 
-async fn create_user(Json(payload): Json<CreateUser>) -> (StatusCode, Json<User>) {
+async fn create_user(
+    Extension(context): Extension<RequestContext>,
+    Json(payload): Json<CreateUser>,
+) -> (StatusCode, Json<User>) {
     let user = User {
         id: 1337,
         username: payload.username,
     };
 
-    tracing::info!("Hello!");
+    context.log_info("Hello!");
 
     (StatusCode::CREATED, Json(user))
 }

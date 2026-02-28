@@ -16,3 +16,5 @@ Cargo.lock
 # Local Dev
 *.sqlite3
 *.log*
+urocyon/
+!src/urocyon/

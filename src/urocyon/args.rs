@@ -23,23 +23,25 @@ impl From<LogLevel> for Level {
     }
 }
 
-#[derive(Parser, Debug, Serialize)]
+#[derive(Parser, Debug, Serialize, Clone)]
 #[command(version, about, long_about = None)]
 pub struct Args {
     #[arg(short, long, default_value = "localhost")]
     pub address: String,
     #[arg(short, long, default_value_t = 7654)]
     pub port: u16,
-    #[arg(long, default_value = "urocyon.database.sqlite3")]
+    #[arg(long, default_value = "urocyon/database.sqlite3")]
     pub db_path: String,
-    #[arg(long, default_value = "urocyon.log.ndjson")]
+    #[arg(long, default_value = "urocyon/logs/ndjson.")]
     pub log_path: String,
-    #[arg(long, default_value = "info")]
+    #[arg(long, default_value = "urocyon/migrations/")]
+    pub mgr_path: String,
+    #[arg(short, long, default_value = "info")]
     pub log_level: LogLevel,
 }
 
 impl Args {
-    pub fn parse_or_exit() -> Self {
+    pub fn parse_or_exit_with_clap_error() -> Self {
         Self::try_parse().unwrap_or_else(|e| {
             eprintln!("{}", e.to_string());
             std::process::exit(1);

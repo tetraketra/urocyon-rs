@@ -1,21 +1,25 @@
-use crate::server::args::Args;
-
-use anyhow::{Error, Result};
+use anyhow::{Error, Result, anyhow};
+use clap::error::ErrorKind;
 use tracing_subscriber::{filter::LevelFilter, prelude::*};
 
+use crate::urocyon::args::Args;
+
 #[allow(dead_code)]
-pub struct Logs {
+pub struct LogManager {
     guard: tracing_appender::non_blocking::WorkerGuard,
 }
 
-impl Logs {
-    pub fn register(args: &Args) -> Result<Self, Error> {
-        let (writer, guard) = tracing_appender::non_blocking(
-            std::fs::OpenOptions::new()
-                .create(true)
-                .append(true)
-                .open(&args.log_path)?,
-        );
+impl LogManager {
+    pub fn register(args: &Args) -> Result<Self> {
+        let path = std::path::Path::new(&args.log_path);
+        let path_dir = path
+            .parent()
+            .ok_or_else(|| anyhow!("Logs path `{}` has no parent.", path.display()))?;
+        let path_prefix = path
+            .file_name()
+            .ok_or_else(|| anyhow!("Log path `{}` does not end in a base file name.", path.display()))?;
+
+        let (writer, guard) = tracing_appender::non_blocking(tracing_appender::rolling::daily(path_dir, path_prefix));
 
         tracing_subscriber::registry()
             .with(
@@ -32,6 +36,6 @@ impl Logs {
             )
             .init();
 
-        Ok(Logs { guard })
+        Ok(LogManager { guard })
     }
 }
