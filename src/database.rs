@@ -16,24 +16,24 @@ impl Database {
         let db_path = std::path::Path::new(db_path);
         let db_path_parent = db_path
             .parent()
-            .ok_or_else(|| anyhow!("Database file at path `{}` would have no parent.", db_path.display()))?;
+            .ok_or_else(|| anyhow!("Database file at path {db_path:?} would have no parent."))?;
         std::fs::create_dir_all(db_path_parent)
-            .with_context(|| format!("Failed to create database file parent `{}`.", db_path_parent.display()))?;
+            .with_context(|| format!("Failed to create database file parent {db_path_parent:?}."))?;
         let db_uri = format!("file:{}?mode=rwc", db_path.display());
 
         SqlitePool::connect(&db_uri)
             .await
-            .with_context(|| format!("Failed to open SqlitePool at uri `{}`.", db_uri))
+            .with_context(|| format!("Failed to open SqlitePool at uri \"{db_uri}\"."))
     }
 
     async fn create_migrator(mgr_path: &str) -> Result<Migrator> {
         let migr_dir = std::path::Path::new(mgr_path);
         std::fs::create_dir_all(migr_dir)
-            .with_context(|| format!("Failed to create migrations directory `{}`.", migr_dir.display()))?;
+            .with_context(|| format!("Failed to create migrations directory {migr_dir:?}."))?;
 
         Migrator::new(migr_dir)
             .await
-            .with_context(|| format!("Failed to create migrator at directory `{}`.", migr_dir.display()))
+            .with_context(|| format!("Failed to create migrator at directory {migr_dir:?}."))
     }
 
     pub async fn register(args: &Args) -> Result<Self> {

@@ -9,7 +9,7 @@ use urocyon::{RequestContext, ServerBuilder};
 
 #[tokio::main(flavor = "multi_thread", worker_threads = 4)]
 async fn main() -> Result<(), Error> {
-    ServerBuilder::new()
+    ServerBuilder::default()
         .route("/", get(root))
         .route("/users", post(create_user))
         .build_and_serve()

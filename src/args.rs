@@ -39,12 +39,3 @@ pub struct Args {
     #[arg(short, long, default_value = "info")]
     pub log_level: LogLevel,
 }
-
-impl Args {
-    pub fn parse_or_exit_with_clap_error() -> Self {
-        Self::try_parse().unwrap_or_else(|e| {
-            eprintln!("{}", e);
-            std::process::exit(1);
-        })
-    }
-}

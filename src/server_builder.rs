@@ -1,20 +1,17 @@
 use anyhow::{Context, Error, Result, anyhow};
 use axum::{Router, extract::Extension};
+use clap::Parser;
 use sqlx::sqlite::SqlitePool;
 use tokio::net::TcpListener;
 
 use crate::{args::Args, context::RequestContextExtension, database::Database, logs::Logs, server::Server};
 
-#[derive(Clone)]
+#[derive(Clone, Default)]
 pub struct ServerBuilder {
     router: Router,
 }
 
 impl ServerBuilder {
-    pub fn new() -> Self {
-        Self { router: Router::new() }
-    }
-
     pub fn route(
         mut self,
         path: &str,
@@ -25,17 +22,14 @@ impl ServerBuilder {
     }
 
     pub async fn build(self) -> Result<Server, Error> {
-        let args = Args::parse_or_exit_with_clap_error();
+        let args = Args::try_parse()?;
         let logs = Logs::register(&args).with_context(|| anyhow!("Failed to register logs."))?;
         let database = Database::register_and_migrate(&args)
             .await
             .with_context(|| anyhow!("Failed to register and migrate database."))?;
-
-        let listener_addr = format!("{}:{}", args.address, args.port);
-        let listener = TcpListener::bind(listener_addr.clone())
+        let listener = TcpListener::bind((args.address.as_ref(), args.port))
             .await
-            .with_context(|| format!("Failed to open TcpListener at address `{}`.", listener_addr))?;
-
+            .with_context(|| format!("Failed to open TcpListener on \"{}:{}\".", args.address, args.port))?;
         let router = self.router.layer(Extension(database.pool.clone())).with_trace_layer();
 
         Ok(Server::new(router, listener, args, logs, database))

@@ -14,10 +14,10 @@ impl Logs {
         let path = std::path::Path::new(&args.log_path);
         let path_dir = path
             .parent()
-            .ok_or_else(|| anyhow!("Logs path `{}` has no parent.", path.display()))?;
+            .ok_or_else(|| anyhow!("Logs path {path:?} has no parent."))?;
         let path_prefix = path
             .file_name()
-            .ok_or_else(|| anyhow!("Log path `{}` does not end in a base file name.", path.display()))?;
+            .ok_or_else(|| anyhow!("Log path {path:?} does not end in a base file name."))?;
 
         let (writer, guard) = tracing_appender::non_blocking(tracing_appender::rolling::daily(path_dir, path_prefix));
 
